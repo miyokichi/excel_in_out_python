@@ -1,0 +1,153 @@
+version: '1.0'
+source: sample.xlsx
+sheets:
+  Sheet1:
+    D1:
+      formula: =SUM(A1:A4)
+      cached_value: 55
+      ast:
+        type: Function
+        name: SUM
+        args:
+        - type: Range
+          sheet: null
+          start: A1
+          end: A4
+    D2:
+      formula: =AVERAGE(A1:A3)
+      cached_value: 20
+      ast:
+        type: Function
+        name: AVERAGE
+        args:
+        - type: Range
+          sheet: null
+          start: A1
+          end: A3
+    D3:
+      formula: =IF(A4>0,"positive","negative")
+      cached_value: negative
+      ast:
+        type: Function
+        name: IF
+        args:
+        - type: BinaryOp
+          op: '>'
+          left:
+            type: CellRef
+            sheet: null
+            address: A4
+          right:
+            type: Literal
+            kind: number
+            value: 0
+        - type: Literal
+          kind: string
+          value: positive
+        - type: Literal
+          kind: string
+          value: negative
+    D4:
+      formula: =CONCATENATE(B1," ",B2)
+      cached_value: Hello World
+      ast:
+        type: Function
+        name: CONCATENATE
+        args:
+        - type: CellRef
+          sheet: null
+          address: B1
+        - type: Literal
+          kind: string
+          value: ' '
+        - type: CellRef
+          sheet: null
+          address: B2
+    D5:
+      formula: =A1*C1+A2
+      cached_value: 50
+      ast:
+        type: BinaryOp
+        op: +
+        left:
+          type: BinaryOp
+          op: '*'
+          left:
+            type: CellRef
+            sheet: null
+            address: A1
+          right:
+            type: CellRef
+            sheet: null
+            address: C1
+        right:
+          type: CellRef
+          sheet: null
+          address: A2
+    D6:
+      formula: =MAX(A1:A4)
+      cached_value: 30
+      ast:
+        type: Function
+        name: MAX
+        args:
+        - type: Range
+          sheet: null
+          start: A1
+          end: A4
+    D7:
+      formula: =IF(AND(A1>0,A2>0),"both","not both")
+      cached_value: both
+      ast:
+        type: Function
+        name: IF
+        args:
+        - type: Function
+          name: AND
+          args:
+          - type: BinaryOp
+            op: '>'
+            left:
+              type: CellRef
+              sheet: null
+              address: A1
+            right:
+              type: Literal
+              kind: number
+              value: 0
+          - type: BinaryOp
+            op: '>'
+            left:
+              type: CellRef
+              sheet: null
+              address: A2
+            right:
+              type: Literal
+              kind: number
+              value: 0
+        - type: Literal
+          kind: string
+          value: both
+        - type: Literal
+          kind: string
+          value: not both
+    D8:
+      formula: =VLOOKUP(C1,F2:G4,2,FALSE)
+      cached_value: three
+      ast:
+        type: Function
+        name: VLOOKUP
+        args:
+        - type: CellRef
+          sheet: null
+          address: C1
+        - type: Range
+          sheet: null
+          start: F2
+          end: G4
+        - type: Literal
+          kind: number
+          value: 2
+        - type: Literal
+          kind: bool
+          value: false

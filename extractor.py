@@ -19,10 +19,15 @@ def extract(path: str) -> dict[str, dict[str, dict[str, Any]]]:
         for row in ws_formula.iter_rows():
             for cell in row:
                 value = cell.value
+                formula_str = None
                 if isinstance(value, str) and value.startswith("="):
+                    formula_str = value
+                elif hasattr(value, "text"):  # ArrayFormula object
+                    formula_str = value.text
+                if formula_str is not None:
                     address = cell.coordinate
                     cached = ws_values[address].value
-                    cells[address] = {"formula": value, "cached_value": cached}
+                    cells[address] = {"formula": formula_str, "cached_value": cached}
 
         if cells:
             result[sheet_name] = cells

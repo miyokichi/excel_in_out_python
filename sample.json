@@ -221,6 +221,49 @@
             }
           ]
         }
+      },
+      "D10": {
+        "formula": "=SQRT(SUMSQ(IF(B1:B3=\"Hello\",A1:A3)))",
+        "cached_value": 31.622776601683793,
+        "ast": {
+          "type": "Function",
+          "name": "SQRT",
+          "args": [
+            {
+              "type": "Function",
+              "name": "SUMSQ",
+              "args": [
+                {
+                  "type": "Function",
+                  "name": "IF",
+                  "args": [
+                    {
+                      "type": "BinaryOp",
+                      "op": "=",
+                      "left": {
+                        "type": "Range",
+                        "sheet": null,
+                        "start": "B1",
+                        "end": "B3"
+                      },
+                      "right": {
+                        "type": "Literal",
+                        "kind": "string",
+                        "value": "Hello"
+                      }
+                    },
+                    {
+                      "type": "Range",
+                      "sheet": null,
+                      "start": "A1",
+                      "end": "A3"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
       }
     }
   }

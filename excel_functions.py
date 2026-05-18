@@ -163,6 +163,10 @@ def xl_exp(args: list) -> float:
     return math.exp(_coerce_num(args[0]))
 
 
+def xl_sumsq(args: list) -> float:
+    return sum(v * v for v in _numeric(_flatten(args)))
+
+
 # ── Logic ─────────────────────────────────────────────────────────────────────
 
 def xl_if(args: list) -> Any:
@@ -469,6 +473,7 @@ REGISTRY: dict[str, Any] = {
     "LN": xl_ln,
     "LOG": xl_log,
     "EXP": xl_exp,
+    "SUMSQ": xl_sumsq,
     # Logic
     "IF": xl_if,
     "IFS": xl_ifs,

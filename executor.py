@@ -100,6 +100,14 @@ def evaluate(node: dict, ctx: WorkbookContext) -> Any:
         fn = _BINARY_OPS.get(op)
         if fn is None:
             raise ValueError(f"Unknown binary operator: {op!r}")
+        # Array broadcasting: apply element-wise when either side is a list
+        if isinstance(left, list) or isinstance(right, list):
+            flat_l = left if isinstance(left, list) else None
+            flat_r = right if isinstance(right, list) else None
+            length = len(flat_l if flat_l is not None else flat_r)
+            l_items = flat_l if flat_l is not None else [left] * length
+            r_items = flat_r if flat_r is not None else [right] * length
+            return [fn(lv, rv) for lv, rv in zip(l_items, r_items)]
         return fn(left, right)
 
     if t == "UnaryOp":
@@ -123,6 +131,15 @@ def evaluate(node: dict, ctx: WorkbookContext) -> Any:
         if name == "IF":
             raw_args = node["args"]
             condition = evaluate(raw_args[0], ctx)
+            # Array IF: condition is a list → evaluate element-wise
+            if isinstance(condition, list):
+                true_vals = evaluate(raw_args[1], ctx) if len(raw_args) > 1 else [True] * len(condition)
+                false_vals = evaluate(raw_args[2], ctx) if len(raw_args) > 2 else [False] * len(condition)
+                if not isinstance(true_vals, list):
+                    true_vals = [true_vals] * len(condition)
+                if not isinstance(false_vals, list):
+                    false_vals = [false_vals] * len(condition)
+                return [tv if c else fv for c, tv, fv in zip(condition, true_vals, false_vals)]
             if condition:
                 return evaluate(raw_args[1], ctx) if len(raw_args) > 1 else True
             return evaluate(raw_args[2], ctx) if len(raw_args) > 2 else False
